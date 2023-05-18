@@ -1,13 +1,22 @@
 import React from 'react';
 import { createRoot } from 'react-dom/client';
 import { Provider } from 'react-redux';
-import { store } from './app/store';
+import { legacy_createStore as createStore, applyMiddleware } from "redux";
+import createSagaMiddleware from "redux-saga";
+import { logger } from "redux-logger";
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import './index.css';
+import appReducer from "./app/reducers";
+import appMiddleware from "./app/middlewares";
 
 const container = document.getElementById('root')!;
 const root = createRoot(container);
+
+const middleware = createSagaMiddleware();
+const store = createStore(appReducer, applyMiddleware(middleware, logger));
+
+middleware.run(appMiddleware);
 
 root.render(
   <React.StrictMode>

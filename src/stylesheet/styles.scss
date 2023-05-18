@@ -1,0 +1,517 @@
+// == Breakpoints ===
+$breakpoints: (
+  small: 480px,
+  medium: 768px,
+  wide: 960px,
+  large: 1024px,
+  largest: 1280px,
+  super-largest: 1441px,
+);
+
+$color: (
+  primary: #38B3F9,
+  btn-hover: #38B3F9,
+  black: #000000,
+  text-black: #000000,
+  white: #ffffff,
+  text-gray: #A6AEBC,
+  form-error-bg: RGBA(211, 44, 31, 0.1),
+  place-holder-gray: #e5e5e5,
+  text-required: #fff,
+  box-shadow: #88888838,
+  btn-second-active: white,
+  btn-line: #5ac363,
+  btn-line-active: #006d00,
+  background-primary: #0e1c39,
+);
+
+$font-size: (
+  xs: 11px,
+  sm: 13px,
+  normal: 16px,
+  lg: 18px,
+  xl: 20px,
+  xxl: 24px,
+  xxxl: 30px,
+);
+
+$font-body: san-serif;
+$font-japan: serif;
+
+// === RESPOND ABOVE ===
+// @include respond-above(small) {}
+@mixin respond-above($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+    @media (min-width: $breakpoint-value) {
+      @content;
+    }
+  } @else {
+    @warn 'Invalid breakpoint: #{$breakpoint}.';
+  }
+}
+
+// === RESPOND BELOW ===
+// @include respond-below(small) {}
+@mixin respond-below($breakpoint) {
+  @if map-has-key($breakpoints, $breakpoint) {
+    $breakpoint-value: map-get($breakpoints, $breakpoint);
+    @media (max-width: ($breakpoint-value - 1)) {
+      @content;
+    }
+  } @else {
+    @warn 'Invalid breakpoint: #{$breakpoint}.';
+  }
+}
+
+// === RESPOND BETWEEN ===
+// @include respond-between(small, medium);
+@mixin respond-between($lower, $upper) {
+  @if map-has-key($breakpoints, $lower) and
+    map-has-key($breakpoints, $upper)
+  {
+    $lower-breakpoint: map-get($breakpoints, $lower);
+    $upper-breakpoint: map-get($breakpoints, $upper);
+    @media (min-width: $lower-breakpoint) and (max-width: ($upper-breakpoint - 1)) {
+      @content;
+    }
+  } @else {
+    @if (map-has-key($breakpoints, $lower) == false) {
+      @warn 'Your lower breakpoint was invalid: #{$lower}.';
+    }
+    @if (map-has-key($breakpoints, $upper) == false) {
+      @warn 'Your upper breakpoint was invalid: #{$upper}.';
+    }
+  }
+}
+
+@mixin border-radius($radius) {
+  -webkit-border-radius: $radius;
+  -moz-border-radius: $radius;
+  border-radius: $radius;
+}
+@mixin box-shadow($shadow) {
+  box-shadow: $shadow;
+  -webkit-box-shadow: $shadow;
+  -moz-box-shadow: $shadow;
+}
+@mixin transition($transition) {
+  -webkit-transition: $transition;
+  -moz-transition: $transition;
+  -ms-transition: $transition;
+  -o-transition: $transition;
+  transition: $transition;
+}
+@mixin transform($value) {
+  -ms-transform: $value;
+  -webkit-transform: $value;
+  transform: $value;
+}
+@mixin transformX($transition) {
+  -ms-transform: translateX($transition);
+  -webkit-transform: translateX($transition);
+  transform: translateX($transition);
+}
+@mixin transformY($transition) {
+  -ms-transform: translateY($transition);
+  -webkit-transform: translateY($transition);
+  transform: translateY($transition);
+}
+@mixin opacity($opacity) {
+  -webkit-opacity: $opacity;
+  -moz-opacity: $opacity;
+  opacity: $opacity;
+}
+@mixin clearfix() {
+  &::after {
+    display: block;
+    content: '';
+    clear: both;
+  }
+}
+@mixin font-icon($icon) {
+  content: map-get($font-icon, $icon);
+  font-family: map-get($font-family, icon);
+  -webkit-font-smoothing: antialiased;
+}
+@mixin border-box($border-box) {
+  -webkit-box-sizing: $border-box;
+  -moz-box-sizing: $border-box;
+  box-sizing: $border-box;
+}
+@mixin text-fill-color($prColor) {
+  -webkit-text-fill-color: map-get($color, $prColor) !important;
+}
+@mixin flex-direction($direction) {
+  -webkit-flex-direction: $direction;
+  -moz-flex-direction: $direction;
+  flex-direction: $direction;
+}
+
+// Flexbox display
+@mixin flexbox() {
+  display: -webkit-box;
+  display: -moz-box;
+  display: -ms-flexbox;
+  display: -webkit-flex;
+  display: flex;
+}
+@mixin flex-wrap($wrap) {
+  -webkit-flex-wrap: $wrap;
+  -moz-flex-wrap: $wrap;
+  -ms-flex-wrap: $wrap;
+  flex-wrap: $wrap;
+}
+
+@mixin ellipsis-special($number: null) {
+  overflow: hidden;
+  @if type-of($number) != number {
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    display: box;
+    display: -moz-box;
+    display: -webkit-box;
+    display: -ms-box;
+    box-orient: vertical;
+    -moz-box-orient: vertical;
+    -ms-line-clamp: $number;
+    -moz-line-clamp: $number;
+    -webkit-line-clamp: $number;
+    word-wrap: break-word;
+    white-space: normal;
+    /*! autoprefixer: off */
+    -webkit-box-orient: vertical;
+    -moz-box-orient: vertical;
+  }
+}
+
+// === CONVERT PXREM ===
+@function strip-units($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+@function convertRootPxToEm($value) {
+  // check for null:
+  @if ($value == null) {
+    @return $value;
+  }
+  // assume em:
+  @if (unitless($value) or unit($value) == em) {
+    @return 0em + $value;
+  } @else {
+    @return 0em + strip-units($value) / 16;
+  }
+}
+
+@function convertPxToRem($px) {
+  @return 0rem + strip-units($px) / 16;
+}
+
+@function strip-units($number) {
+  @return $number / ($number * 0 + 1);
+}
+
+@function convertRootPxToEm($value) {
+  // check for null:
+  @if ($value == null) {
+    @return $value;
+  }
+  // assume em:
+  @if (unitless($value) or unit($value) == em) {
+    @return 0em + $value;
+  } @else {
+    @return 0em + strip-units($value) / 16;
+  }
+}
+
+@function convertPxToRem($px) {
+  @return 0rem + strip-units($px) / 16;
+}
+
+@mixin pxRem($property, $values) {
+  // Create a couple of empty lists as output buffers:
+  $px-values: ();
+  $rem-values: ();
+
+  // Ensure $values is a list.
+  @if type-of($values) != 'list' {
+    $values: join((), $values);
+  }
+
+  // Loop through the $values list:
+  @each $value in $values {
+    @if type-of($value) ==
+      number and
+      (unitless($value) or unit($value) == px)
+    {
+      $px-values: join($px-values, 0px + ($value));
+      $rem-values: join($rem-values, convertPxToRem($value));
+    } @else {
+      // no conversion:
+      $px-values: join($px-values, $value);
+      $rem-values: join($rem-values, $value);
+    }
+  }
+
+  #{$property}: $px-values;
+
+  // don't add media query if it's not needed:
+  @if $px-values != $rem-values {
+    // @media only all {
+    #{$property}: $rem-values;
+    // }
+  }
+}
+// == End / Convert Px To Rem
+.modal-container {
+  z-index: 999;
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: rgba(0, 0, 0, 0.144);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fade 0.25s ease-in;
+  .modal2-custom {
+    display: block;
+    z-index: 10;
+    width: 40%;
+    position: absolute;
+    background-color: rgba(242, 242, 242, 1);
+    @include pxRem(border-radius, 20);
+    @include pxRem(padding, 10 25);
+    @include pxRem(min-height, 220);
+    animation: zoom-in 0.25s linear;
+    .m-title {
+      @include pxRem(font-size, 30);
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center; 
+    }
+    .sub-title {
+      @include pxRem(font-size, 14);
+      color: map-get($color, text-gray);
+      a {
+        color: #38B3F9;
+        font-weight: 600;
+        &:hover {
+          cursor: pointer;
+        }
+      }
+    }
+    .m-content {
+      @include pxRem(margin-top, 20);
+      .content-item {
+      @include pxRem(height, 40);
+        display: flex;
+        text-align: left;
+        margin: 0 auto;
+        .item-title {
+          @include pxRem(font-size, 16);
+          width: 150px;
+          font-weight: 600;
+        }
+      }
+    }
+    &.modal2-delete {
+      @include pxRem(min-height, 200);
+      background-color: #fff;
+      width: 30%;
+      .m-title {
+        div {
+          width: 100%;
+          text-align: center;
+        }
+      }
+      .sub-title {
+          text-align: center;
+      }
+      .m-content {
+        @include pxRem(margin-top, 40);
+        display: flex;
+        justify-content: space-between;
+        button {
+          width: 40%;
+          @include pxRem(border-radius, 30);
+          &.btn-secondary {
+            background-color: #EDF0F5;
+            border: none;
+          }
+        }
+      }
+    }
+  }
+
+  .modal2-out-minutes {
+    display: block;
+    z-index: 10;
+    width: 40%;
+    position: absolute;
+    background-color: rgba(242, 242, 242, 1);
+    @include pxRem(border-radius, 20);
+    @include pxRem(padding, 10 25 20 25);
+    animation: zoom-in 0.25s linear;
+    .m-title {
+      @include pxRem(font-size, 30);
+      font-weight: 700;
+      display: flex;
+      justify-content: space-between;
+      align-items: center; 
+    }
+    .sub-title {
+      @include pxRem(font-size, 14);
+      color: map-get($color, text-gray);
+    }
+    .m-content {
+      display: flex;
+      justify-content: flex-end;
+      button {
+        @include pxRem(width, 120);
+        @include pxRem(font-size, 14);
+      }
+    }
+  }
+
+  .modal2 {
+    display: block;
+    z-index: 10;
+    @include pxRem(width, 270);
+    position: absolute;
+    top: 33%;
+    background-color: rgba(242, 242, 242, 1);
+    @include pxRem(border-radius, 20);
+    @include pxRem(padding, 19 16 0 16);
+    text-align: center;
+    animation: zoom-in 0.25s linear;
+    .head-title {
+      @include pxRem(font-size, 17);
+      @include pxRem(line-height, 22);
+      font-weight: 600;
+    }
+    .sub-tile {
+      word-break: break-word;
+      @include pxRem(font-size, 13);
+      @include pxRem(padding-bottom, 16);
+    }
+    &.modal-inform {
+      width: 20%;
+      .sub-tile {
+      word-break: break-word;
+      @include pxRem(font-size, 13);
+      @include pxRem(padding-bottom, 0);
+    }
+      .btn-container {
+        border-color: none;
+        button {
+          width: 100%;
+        }
+      }
+    }
+  }
+  .modal-error {
+    background-color: #fff;
+    border: 2px solid rgba(60, 60, 67, 0.36);
+    color: black;
+    .head-title {
+      font-size: 20px;
+      font-weight: 700;
+    }
+    .btn-error-container {
+      display: flex;
+      justify-content: flex-end;
+      border: none;
+      padding-bottom: 10px;
+      &.type-disabled {
+        justify-content: space-between;
+      }
+      button {
+            margin-right: 20px;
+            width: 30%!important;
+            color: black;
+            border-radius: 10px;
+            border: 1px solid #bababa!important;
+            padding: 0!important;
+            &:hover {
+              font-weight: 600;
+            }
+            &.btn-upgrade {
+              font-size: 15px;
+              margin-left: 20px;
+              background-color:#0e71eb;
+              color: white;
+            }
+          }
+    }
+    
+  }
+  .btn-container {
+    @include flexbox;
+    @include pxRem(margin, 0 -16);
+    border-top: 1px solid rgba(60, 60, 67, 0.36);
+    // &.btn-error-container {
+    // border-top: 1px solid rgba(218, 36, 36, 0.815);
+    //   display: block;
+    //   .btn-modal {
+    //     width: 100%;
+    //     &.btn-cancel {
+    //       border-right: 0;
+    //     }
+    //   }
+    // }
+    .btn-modal {
+      @include pxRem(padding, 12 0 10);
+      @include pxRem(margin, 0);
+      @include pxRem(font-size, 17);
+      width: 50%;
+      border: none;
+      background-color: transparent;
+      color: #027bfe;
+      font-weight: 600;
+      &.btn-cancel {
+        border-right: 1px solid rgba(60, 60, 67, 0.36);
+        font-weight: 400;
+      }
+    }
+  }
+}
+
+.error-popup {
+  z-index: 999;
+  position: fixed !important;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(242, 242, 242, 1);
+}
+
+@keyframes fade {
+  0% {
+    opacity: 0.5;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+@keyframes zoom-in {
+  0% {
+    transform: scale(1.2, 1.2);
+  }
+  100% {
+    transform: scale(1, 1);
+  }
+}
+
+@media (max-width: 768px) {
+  .modal-container {
+    .modal2-custom {
+      width: 70%;
+    }
+  }
+}
