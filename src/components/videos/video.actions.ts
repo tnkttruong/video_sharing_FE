@@ -5,7 +5,7 @@ export const getVideoList = (payload: object) => ({
     payload,
 });
 
-export const getVideoListSuccess = (payload: any) => ({
-    type: ACTION_TYPES.GET_LIST_VIDEO_SUCCESS,
+export const getVideo = (payload: any) => ({
+    type: ACTION_TYPES.GET_VIDEO,
     payload,
 });

@@ -19,8 +19,11 @@ export function* loginMiddleware({ payload }: AnyAction) {
   }
 }
 
+export function* updateCurrentUserMiddleware({ payload }: AnyAction) {}
+
 export function* watchLogin() {
   yield all([
     takeLatest(ACTION_TYPES.LOGIN, loginMiddleware),
+    takeLatest(ACTION_TYPES.UPDATE_CURRENT_USER, updateCurrentUserMiddleware),
   ]);
 }

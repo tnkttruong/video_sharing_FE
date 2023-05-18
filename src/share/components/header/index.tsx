@@ -4,7 +4,7 @@ import { useForm } from 'react-hook-form';
 import Button from "../../partials/Button";
 import { Input } from "../../partials/Input";
 import { EMAIL_PATTERN } from "../../constants/pattern";
-import { login } from "./login.actions";
+import { login, updateCurrentUser } from "./login.actions";
 import { useDispatch, useSelector } from 'react-redux';
 import "./Header.scss";
 interface IFormValues {
@@ -15,8 +15,8 @@ export const Header = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const [isHideToolbar, setisHideToolbar] = useState(true);
-  const [currentUser, setCurrentUser] = useState<any>();
   const dispatch = useDispatch();
+  const { currentUser } = useSelector((state: any) => state.authReducer);
 
   const { register, formState: { errors }, handleSubmit, watch } = useForm<IFormValues>({
     mode: 'onSubmit',
@@ -32,8 +32,9 @@ export const Header = () => {
       successAction: (data: any) => {
         if (data) {
           localStorage.setItem('accessToken', data.auth_token)
-          localStorage.setItem('currentUser', data.email)
-          setCurrentUser(data.email)
+          const currentUser = {email: data.email, id: data.id}
+          localStorage.setItem('currentUser', JSON.stringify(currentUser))
+          dispatch(updateCurrentUser(currentUser))
         }
       },
     }))
@@ -59,14 +60,13 @@ export const Header = () => {
   const handleLogout = async () => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('currentUser')
-    setCurrentUser(null)
+    dispatch(updateCurrentUser(null))
     await new Promise(resolve => setTimeout(resolve, 1000));
     navigate('/');
   }
 
   useEffect(() => {
     checkAuthEndpoint();
-    setCurrentUser(localStorage.getItem('currentUser'))
   }, [pathname])
 
   return (
@@ -77,9 +77,9 @@ export const Header = () => {
              <img className="navbar-logo" src="./assets/logo-new-white-small.png" alt="logo"></img>
           </a>
           <div className="collapse navbar-collapse" id="navbarNav">
-            { currentUser ? (
+            { currentUser?.id ? (
               <>
-                <span>Wellcome  {currentUser} </span>
+                <span>Wellcome  {currentUser.email} </span>
                 <Button className="btn btn-outline-success logout-btn" disabled={false} onClick={() => handleLogout()}>
                   Logout
                 </Button>

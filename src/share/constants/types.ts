@@ -9,6 +9,8 @@ const makeActionTypes = (type: string) => ({
 export const ACTION_TYPES = {
     ...makeActionTypes('LOGIN'),
     ...makeActionTypes('GET_LIST_VIDEO'),
+    ...makeActionTypes('GET_VIDEO'),
+    ...makeActionTypes('UPDATE_CURRENT_USER'),
     ...makeActionTypes('SET_ERROR'),
     ...makeActionTypes('CLEAR_ERROR'),
 };
