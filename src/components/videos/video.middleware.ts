@@ -4,6 +4,7 @@ import { put, takeLatest, all } from 'redux-saga/effects';
 import { getVideoList } from './video.actions';
 import { ApiService } from '../../core/services/api.service';
 import { ACTION_TYPES } from '../../share/constants/types';
+import { setError } from '../../share/errors/error.actions';
 
 const ENDPOINT = process.env.REACT_APP_API_URL || 'http://localhost:3002';
 
@@ -26,9 +27,21 @@ export function* getVideoMiddleware({ payload }: AnyAction) {
     console.log("GET_VIDEO ERROR", error);
   }
 }
+
+export function* createVideoMiddleware({ payload }: AnyAction) {
+  try {
+    const res: AxiosResponse = yield apiService.post([ENDPOINT + '/videos'], { ...payload.data });
+    payload.successAction?.(res);
+  } catch (error: any) {
+    console.log("CREATE_VIDEO ERROR", error);
+    yield put(setError(error));
+  }
+}
+
 export function* watchVideo() {
   yield all([
     takeLatest(ACTION_TYPES.GET_LIST_VIDEO, listVideoMiddleware),
     takeLatest(ACTION_TYPES.GET_VIDEO, getVideoMiddleware),
+    takeLatest(ACTION_TYPES.CREATE_VIDEO, createVideoMiddleware),
   ]);
 }

@@ -9,3 +9,8 @@ export const getVideo = (payload: any) => ({
     type: ACTION_TYPES.GET_VIDEO,
     payload,
 });
+
+export const createVideo = (payload: any) => ({
+    type: ACTION_TYPES.CREATE_VIDEO,
+    payload,
+});

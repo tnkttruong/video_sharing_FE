@@ -80,6 +80,9 @@ export const Header = () => {
             { currentUser?.id ? (
               <>
                 <span>Wellcome  {currentUser.email} </span>
+                <Link className="btn btn-primary share-link" to="/share_video">
+                  Share a movie
+                </Link>
                 <Button className="btn btn-outline-success logout-btn" disabled={false} onClick={() => handleLogout()}>
                   Logout
                 </Button>

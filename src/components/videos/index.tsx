@@ -1,7 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVideoList, getVideo } from "./video.actions";
-import { Modal } from '../../share/partials/Modal';
 import './video.scss'
 import { db } from "../../core/services/firebase";
 import { remove, onValue, ref } from "firebase/database";
@@ -33,7 +32,6 @@ export const Videos = () => {
   const dispatch = useDispatch();
   const [notifications, setNotifications] = useState<any[]>([])
   const [listVideos, setListVideos] = useState<any[]>([])
-  const loader = useRef<HTMLDivElement | null>(null);
   const [page, setPage] = useState(1)
   const { currentUser } = useSelector((state: any) => state.authReducer);
   
