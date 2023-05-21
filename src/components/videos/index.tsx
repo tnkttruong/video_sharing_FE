@@ -2,10 +2,7 @@ import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getVideoList, getVideo } from "./video.actions";
 import './video.scss'
-import { db } from "../../core/services/firebase";
-import { remove, onValue, ref } from "firebase/database";
-let initialState = true;
-let unsubscribeConnect:any;
+
 const Video = ({ video }: any) => {
   const videoUrl = `https://www.youtube.com/embed/${video.video_id}`
   return (
@@ -30,10 +27,9 @@ const Video = ({ video }: any) => {
 
 export const Videos = () => {
   const dispatch = useDispatch();
-  const [notifications, setNotifications] = useState<any[]>([])
   const [listVideos, setListVideos] = useState<any[]>([])
   const [page, setPage] = useState(1)
-  const { currentUser } = useSelector((state: any) => state.authReducer);
+  const { latestSharedVideoId } = useSelector((state: any) => state.notificationReducer);
   
   const handleListVideos = () => {
     dispatch(getVideoList({
@@ -57,6 +53,9 @@ export const Videos = () => {
     handleListVideos();
   }, [page])
   useEffect(() => {
+    handleListVideos();
+  }, [])
+  useEffect(() => {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [listVideos])
@@ -69,51 +68,11 @@ export const Videos = () => {
       },
     }))
   }
-  const initNotificationConnect = async () => {
-    if(unsubscribeConnect) {unsubscribeConnect()}
-    unsubscribeConnect = onValue(ref(db, `notifications/${currentUser?.id}`), (snapshot) => {
-      const data = snapshot.val();
-      if(data){
-        if(initialState){
-          initialState = false;
-        }else{
-          setNotifications(prevNotifications => [data, ...prevNotifications]);
-          getVideoAndPushToList(data.id)
-          setTimeout(() => {
-            removeNotification(data);
-          }, 5000);
-        }
-      }
-    });
-  }
-  const closeNotification = (notificationToRemove:any) => {
-    removeNotification(notificationToRemove);
-  };
-  const removeNotification = (notificationToRemove:any) =>{
-    setNotifications(prevNotifications => prevNotifications.filter(notification => notification !== notificationToRemove));
-  }
   useEffect(() => {
-    handleListVideos();
-    if(currentUser){initNotificationConnect()}
-  }, [])
-  useEffect(() => {
-    if(!currentUser){
-      if(unsubscribeConnect) {unsubscribeConnect()}
-    }else{
-      initNotificationConnect()
-    }
-  }, [currentUser])
-
+    if(latestSharedVideoId){getVideoAndPushToList(latestSharedVideoId);}
+  }, [latestSharedVideoId])
   return (
     <>
-      <div className="notification">
-        {notifications.map((notification, index) => (
-            <div key={index} className="alert alert-success alert-dismissible" role="alert">
-              <span>  {notification.user_email} just share </span><span>  {notification.title}  </span>
-              <button type="button" className="btn-close" onClick={() => closeNotification(notification)}></button>
-            </div>
-        ))}
-      </div>
       <h1> Video List </h1>
       {
         listVideos && listVideos.map((item: any) => <Video video={{ ...item }} />)
