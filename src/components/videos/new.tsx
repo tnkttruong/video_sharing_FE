@@ -31,7 +31,7 @@ export const NewVideo = () => {
 
   const loginForm = {
     url: register({
-      required: true,
+      required: 'Please input Url',
     }),
   }
 

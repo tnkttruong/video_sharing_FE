@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Modal } from '../partials/Modal';
 
 import { clearError } from './error.actions';
+import './error.scss';
 
 export enum ERROR_TYPE {
   disabled = 'disabled'

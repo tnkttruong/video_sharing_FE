@@ -80,23 +80,27 @@ export const Header = () => {
               </>
             ) : (
               <>
-                <form className="d-flex ml-auto" onSubmit={handleSubmit(onSubmit)}>
-                  <Input
-                    className="form-control me-2"
-                    type="text"
-                    name={'email'}
-                    register={loginForm.email}
-                    placeholder="Email"
-                    errors={errors}
-                  />
-                  <Input
-                    className="form-control me-2"
-                    type="password"
-                    name={'password'}
-                    register={loginForm.password}
-                    placeholder="Password"
-                    errors={errors}
-                  />
+                <form className="login-form d-flex ml-auto" onSubmit={handleSubmit(onSubmit)}>
+                  <div className='form-group'>
+                    <Input
+                      className="form-control me-2"
+                      type="text"
+                      name={'email'}
+                      register={loginForm.email}
+                      placeholder="Email"
+                      errors={errors}
+                    />
+                  </div>
+                  <div className='form-group'>
+                    <Input
+                      className="form-control me-2"
+                      type="password"
+                      name={'password'}
+                      register={loginForm.password}
+                      placeholder="Password"
+                      errors={errors}
+                    />
+                  </div>
                   <Button className="btn btn-outline-success btn-submit" disabled={false} type="submit">
                     Login / Register
                   </Button>

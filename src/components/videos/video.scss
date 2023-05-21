@@ -10,9 +10,13 @@
   .input-group{
     justify-content: center;
     margin: 40px 0px;
+    .form-group input{
+      height: 40px
+    }
   }
   .f-label{
     align-items: center;
     margin-right: 20px;
+    height: 40px;
   }
 }
