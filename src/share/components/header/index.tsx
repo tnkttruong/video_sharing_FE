@@ -14,7 +14,6 @@ interface IFormValues {
 export const Header = () => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  const [isHideToolbar, setisHideToolbar] = useState(true);
   const dispatch = useDispatch();
   const { currentUser } = useSelector((state: any) => state.authReducer);
 
@@ -53,10 +52,6 @@ export const Header = () => {
     }),
   }
 
-  const checkAuthEndpoint = () => {
-    setisHideToolbar(['videos/new'].includes((pathname.replace('/', ''))))
-  }
-
   const handleLogout = async () => {
     localStorage.removeItem('accessToken')
     localStorage.removeItem('currentUser')
@@ -65,13 +60,9 @@ export const Header = () => {
     navigate('/');
   }
 
-  useEffect(() => {
-    checkAuthEndpoint();
-  }, [pathname])
-
   return (
     <>
-      <div className={isHideToolbar ? "toolbar d-none" : "toolbar"}>
+      <div className="toolbar">
         <nav className="navbar navbar-expand-lg navbar-light bg-light">
           <a className="navbar-brand" href="/">
              <img className="navbar-logo" src="./assets/logo-new-white-small.png" alt="logo"></img>

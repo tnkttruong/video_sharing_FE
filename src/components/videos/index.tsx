@@ -53,9 +53,6 @@ export const Videos = () => {
     handleListVideos();
   }, [page])
   useEffect(() => {
-    handleListVideos();
-  }, [])
-  useEffect(() => {
     window.addEventListener('scroll', onScroll)
     return () => window.removeEventListener('scroll', onScroll)
   }, [listVideos])

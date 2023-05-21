@@ -8,9 +8,9 @@ let initialState = true;
 let unsubscribeConnect:any;
 
 export const Notifications = () => {
-	const [notifications, setNotifications] = useState<any[]>([])
-	const { currentUser } = useSelector((state: any) => state.authReducer);
-	const dispatch = useDispatch();
+  const [notifications, setNotifications] = useState<any[]>([])
+  const { currentUser } = useSelector((state: any) => state.authReducer);
+  const dispatch = useDispatch();
   const initNotificationConnect = async () => {
     if(unsubscribeConnect) {unsubscribeConnect()}
     unsubscribeConnect = onValue(ref(db, `notifications/${currentUser?.id}`), (snapshot) => {
