@@ -1,46 +1,90 @@
-# Getting Started with Create React App
+# Video Sharing FE
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) TS template.
+This repository contains the front-end of the Video Sharing application.
 
-## Available Scripts
+## Tech Stack
 
-In the project directory, you can run:
+- [ReactJS](https://reactjs.org/): A JavaScript library for building user interfaces. It's fast, scalable, and simple.
+- [TypeScript](https://www.typescriptlang.org/): TypeScript is a statically compiled language to write clear and simple JavaScript code. It brings a set of new features to JavaScript such as Static Typing, Interfaces, and Generics.
+- [Firebase Realtime Database](https://firebase.google.com/products/realtime-database): A NoSQL cloud database to store and sync data in real-time. It provides real-time update and scaling.
 
-### `npm start`
+## Prerequisites
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+Before you begin, ensure you have met the following requirements:
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+- You have a Firebase Realtime Database. If not, follow this [guide](https://firebase.google.com/docs/database/setup) to create one.
+- You have installed the latest version of [Node.js and npm](https://nodejs.org/en/download/).
 
-### `npm test`
+## Installation
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. Clone the repository:
+```
+git clone git@github.com:tnkttruong/video_sharing_FE.git
+```
+2. Navigate into the project directory:
+```
+cd video_sharing_FE
+```
+3. Install the dependencies:
+```
+npm install
+```
 
-### `npm run build`
+## Configuration
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Update the `.env` file with your Firebase Realtime Database configuration data. You can find the template in `.env.example` file.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Running the Application
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To run the application:
 
-### `npm run eject`
+```
+npm run start
+```
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+Running Tests
+```
+npm run test
+```
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Using Docker:
+docker build -f Dockerfile.dev -t fe_video_sharing_dev .
+docker run  -p 3000:3000 --name video_sharing_web_container --rm -v "$(pwd)":/app  fe_video_sharing_dev:latest
+Please ensure you have Docker installed. If not, follow this [guide](https://docs.docker.com/get-docker/) to install it.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+## Deployment
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+1. SSH into your deployment server:
 
-## Learn More
+    ```
+    ssh your_username@your_server_ip
+    ```
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+2. Navigate to the directory where you want to deploy your application:
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+    ```
+    cd /path/to/your/directory
+    ```
+
+3. Run the deployment script:
+
+    ```
+    ./deploy.sh
+    ```
+Replace `your_username` with your actual username, `your_server_ip` with the IP address of your server, and `/path/to/your/directory` with the path to the directory where you want to deploy the application. The `deploy.sh` script should be present in that directory.
+
+You can change DEPLOY_BRANCH in deploy.sh to your desired branch 
+
+## Troubleshooting
+
+### Issue: Errors during `npm install`
+
+If you encounter errors during the `npm install` step, you may try to force the installation.
+
+#### Solution
+
+Run the following command to force the installation:
+
+```
+npm install --force
+```
