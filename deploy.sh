@@ -1,4 +1,7 @@
 #!/bin/bash
+DEPLOY_BRANCH=main
+echo "Pull latest code from ${DEPLOY_BRANCH}"
+git pull origin $DEPLOY_BRANCH
 
 # Absolute paths
 PROJECT_ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
@@ -22,7 +25,7 @@ mkdir -p "$BUILD_HISTORIES_DIR/$build_folder"
 echo "Building Project npm run build"
 cd "$PROJECT_ROOT"
 npm install --force
-npm run build
+NODE_ENV=production npm run build 
 echo "Move code to $build_folder"
 mv "$PROJECT_ROOT/build/"* "$BUILD_HISTORIES_DIR/$build_folder/"
 
