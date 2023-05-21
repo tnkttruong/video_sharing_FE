@@ -11,17 +11,18 @@ const Video = ({ video }: any) => {
         <div className="row">
           <div className="col-md-6">
             <div className="embed-responsive embed-responsive-16by9">
-              <iframe width="560" height="315" className="embed-responsive-item" src={videoUrl} allowFullScreen></iframe>
+              <iframe title="video" className="embed-responsive-item" src={videoUrl} allowFullScreen></iframe>
             </div>
           </div>
           <div className="col-md-6 video-information">
-            <h2>{ video.title }</h2>
-            <p><strong>Shared by:</strong>{video.user.email}</p>
+            <h2>{video.title}</h2>
+            <p><strong>Shared by: </strong> {video.user.email}</p>
             <p><strong>Description:</strong></p>
-            <p>{ video.detail }</p>
+            <p>{video.detail}</p>
           </div>
         </div>
       </div>
+
     </>)
 }
 

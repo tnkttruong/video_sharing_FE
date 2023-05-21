@@ -26,4 +26,41 @@
       height: 40px;
     }
   }
+  .collapse {
+    &:not(.show) {
+      display: flex;
+      flex-direction: row;
+    }
+  }
+}
+@media only screen and (min-device-width: 768px){
+  .navbar{
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    #navbarNav{
+      justify-content: flex-start;
+    }
+  }
+}
+@media only screen and (min-device-width: 900px){
+  .navbar{
+    flex-wrap: nowrap !important;
+    justify-content: flex-start !important;
+    #navbarNav{
+      justify-content: flex-end;
+    }
+  }
+}
+@media only screen and (max-device-width: 768px){
+  .navbar{
+    .login-form{
+      flex-direction: column;
+      .btn-submit{
+        width: 300px;
+      }
+    }
+    #navbarNav{
+      justify-content: center;
+    }
+  }
 }

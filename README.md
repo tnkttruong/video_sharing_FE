@@ -1,6 +1,6 @@
 # Video Sharing FE
 
-This repository contains the front-end of the Video Sharing application.
+[Project overview](https://github.com/tnkttruong/video_sharing)
 
 ## Tech Stack
 
