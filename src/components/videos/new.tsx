@@ -10,6 +10,7 @@ interface IFormValues {
 }
 export const NewVideo = () => {
   const dispatch = useDispatch();
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
   const { register, formState: { errors }, handleSubmit, watch, setValue } = useForm<IFormValues>({
     mode: 'onSubmit',
     defaultValues: {
@@ -18,11 +19,15 @@ export const NewVideo = () => {
   });
 
   const onSubmit = (e: any) => {
+    if(!e.url){return;}
     dispatch(createVideo({
       data: { url: e.url },
       successAction: async (data: any) => {
         if (data) {
-          alert('Successful video sharing!');
+          setShowSuccessMessage(true);
+          setTimeout(() => {
+            setShowSuccessMessage(false);
+          }, 2000);
           setValue('url', '');
         }
       },
@@ -39,14 +44,16 @@ export const NewVideo = () => {
     <>
       <div className="container">
         <h2>Share your Youtube movie</h2>
+        {showSuccessMessage && <div className="alert alert-success alert-dismissible">Successful video sharing!</div>}
         <form className="new-viveo-form" onSubmit={handleSubmit(onSubmit)}>
           <div className="d-flex input-group">
             <label className="f-label d-flex">URL</label>
             <div className="form-group">
               <Input
-                className="form-control"
+                className="form-control url-input"
                 type="text"
                 name={'url'}
+                placeholder="Youtube URL"
                 register={loginForm.url}
                 errors={errors}
               />
