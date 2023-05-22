@@ -33,6 +33,7 @@ function App() {
               <NewVideo />
             </ProtectedRoute>
           } />
+        <Route path="*" element={<Navigate to="/" replace />} />
         </Routes>
       </Router>
     </div>
