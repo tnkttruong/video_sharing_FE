@@ -2,9 +2,8 @@ import { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setLatestSharedVideoId } from "./notification.actions";
 import { db } from "../../core/services/firebase";
-import { onValue, ref } from "firebase/database";
+import { onValue, ref, remove } from "firebase/database";
 import './notification.scss'
-let initialState = true;
 let unsubscribeConnect:any;
 
 export const Notifications = () => {
@@ -13,18 +12,15 @@ export const Notifications = () => {
   const dispatch = useDispatch();
   const initNotificationConnect = async () => {
     if(unsubscribeConnect) {unsubscribeConnect()}
-    unsubscribeConnect = onValue(ref(db, `notifications/${currentUser?.id}`), (snapshot) => {
+    unsubscribeConnect = onValue(ref(db, `notifications/${currentUser.id}`), (snapshot) => {
       const data = snapshot.val();
-      if(data){
-        if(initialState){
-          initialState = false;
-        }else{
-          setNotifications(prevNotifications => [data, ...prevNotifications]);
-          dispatch(setLatestSharedVideoId(data.id))
-          setTimeout(() => {
-            removeNotification(data);
-          }, 5000);
-        }
+      if(data && !data.read){
+        setNotifications(prevNotifications => [data, ...prevNotifications]);
+        dispatch(setLatestSharedVideoId(data.id))
+        remove(ref(db, `notifications/${currentUser.id}`))
+        setTimeout(() => {
+          removeNotification(data);
+        }, 5000);
       }
     });
   }
