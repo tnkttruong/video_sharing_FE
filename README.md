@@ -49,7 +49,9 @@ npm run test
 
 ## Using Docker:
 docker build -f Dockerfile.dev -t fe_video_sharing_dev .
+
 docker run  -p 3000:3000 --name video_sharing_web_container --rm -v "$(pwd)":/app  fe_video_sharing_dev:latest
+
 Please ensure you have Docker installed. If not, follow this [guide](https://docs.docker.com/get-docker/) to install it.
 
 ## Deployment
